@@ -1,10 +1,10 @@
-import About from "./components/About";
-import Hero from "./components/Hero";
-import NavBar from "./components/Navbar";
-import Features from "./components/Features";
-import Story from "./components/Story";
-import Contact from "./components/Contact";
-import Footer from "./components/Footer";
+import About from "./About";
+import Hero from "./Hero";
+import NavBar from "./Navbar";
+import Features from "./Features";
+import Story from "./Story";
+import Contact from "./Contact";
+import Footer from "./Footer";
 
 function App() {
   return (
