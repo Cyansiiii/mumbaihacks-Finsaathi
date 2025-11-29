@@ -1,0 +1,659 @@
+{
+  "name": "FinSaathi WhatsApp AI Financial Coach for Indian Gig Workers",
+  "nodes": [
+    {
+      "parameters": {
+        "updates": [
+          "messages"
+        ],
+        "options": {}
+      },
+      "id": "276d2d4d-cbab-4781-a028-846a22497f76",
+      "name": "WhatsApp Message Received5",
+      "type": "n8n-nodes-base.whatsAppTrigger",
+      "typeVersion": 1,
+      "position": [
+        1152,
+        688
+      ],
+      "webhookId": "605c9897-4b5c-4527-8619-978684bda920",
+      "credentials": {
+        "whatsAppTriggerApi": {
+          "id": "PfaKCPgrKPp4pfKk",
+          "name": "WhatsApp OAuth account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "id-1",
+              "name": "spending_threshold",
+              "value": 0.7,
+              "type": "number"
+            },
+            {
+              "id": "id-2",
+              "name": "savings_suggestion_amount",
+              "value": 200,
+              "type": "number"
+            },
+            {
+              "id": "id-3",
+              "name": "sheet_id",
+              "value": "1jMYDXiNI_xIkslct9nbzZ-nisjCNhZNerzhHxQ0l-jo",
+              "type": "string"
+            }
+          ]
+        },
+        "includeOtherFields": true,
+        "options": {}
+      },
+      "id": "741332b7-3802-468c-8fbb-b60f03c2f31e",
+      "name": "Workflow Configuration5",
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        1600,
+        688
+      ]
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": false,
+            "leftValue": "",
+            "typeValidation": "loose"
+          },
+          "conditions": [
+            {
+              "id": "id-1",
+              "leftValue": "={{ $json.message.type }}",
+              "rightValue": "image",
+              "operator": {
+                "type": "string",
+                "operation": "equals"
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "id": "3b282a00-ff16-4fff-9b6b-dda06df68158",
+      "name": "Check If Image Attached5",
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.2,
+      "position": [
+        2048,
+        688
+      ]
+    },
+    {
+      "parameters": {
+        "operation": "pdf",
+        "options": {}
+      },
+      "id": "38bcf5f3-cfb4-45f9-9e5d-10eb569e8335",
+      "name": "Extract OCR Text from Screenshot5",
+      "type": "n8n-nodes-base.extractFromFile",
+      "typeVersion": 1.1,
+      "position": [
+        2272,
+        608
+      ]
+    },
+    {
+      "parameters": {
+        "promptType": "define",
+        "text": "={{ $json.messages[0].text.body || $json.extractedText || \"\" }}",
+        "options": {
+          "systemMessage": "You are \"FinSaathi,\" a WhatsApp-based AI financial coach tailored for Indian gig workers (delivery agents, drivers, freelancers). Your goal is to help them manage irregular income and avoid cash crunches.\n\n## LANGUAGE RULES (CRITICAL - MUST FOLLOW STRICTLY)\n**Multilingual Support - EXACT Language Mirroring**\n\nYou MUST respond in the EXACT SAME language the user writes in. This is NON-NEGOTIABLE.\n\n**Supported Languages:**\nEnglish, Hindi, Assamese, Bengali, Bodo, Dogri, Gujarati, Kannada, Kashmiri, Konkani, Maithili, Malayalam, Manipuri (Meitei), Marathi, Nepali, Odia, Punjabi, Sanskrit, Santali, Sindhi, Tamil, Telugu, Urdu\n\n**Language Matching Rules:**\n1. If user writes in English → Respond ONLY in English\n2. If user writes in Hindi → Respond ONLY in Hindi  \n3. If user writes in Tamil → Respond ONLY in Tamil\n4. If user writes in Bengali → Respond ONLY in Bengali\n5. If user writes in Telugu → Respond ONLY in Telugu\n6. If user writes in Marathi → Respond ONLY in Marathi\n7. If user writes in Gujarati → Respond ONLY in Gujarati\n8. If user writes in Kannada → Respond ONLY in Kannada\n9. If user writes in Malayalam → Respond ONLY in Malayalam\n10. If user writes in Punjabi → Respond ONLY in Punjabi\n11. If user writes in Odia → Respond ONLY in Odia\n12. If user writes in Assamese → Respond ONLY in Assamese\n13. And so on for ALL supported languages\n\n**WRONG Examples (DO NOT DO THIS):**\n❌ User writes in Tamil → You respond in Hindi (WRONG!)\n❌ User writes in Bengali → You respond in Hindi (WRONG!)\n❌ User writes in Marathi → You respond in Hindi (WRONG!)\n\n**CORRECT Examples:**\n✅ User writes in Tamil → You respond in Tamil\n✅ User writes in Bengali → You respond in Bengali  \n✅ User writes in Marathi → You respond in Marathi\n✅ User writes in English → You respond in English\n✅ User writes in Hindi → You respond in Hindi\n\n**Language Detection:**\n- Carefully analyze the script and vocabulary of the user message\n- Identify the specific language (not just the script)\n- Respond in that EXACT language\n- Maintain consistency unless user switches languages\n\n## CORE BEHAVIORS\n1. **Tone:** Empathetic, simple, and encouraging (\"Saathi/Friend\" or equivalent in user language). Avoid banking jargon.\n2. **Input Handling:** You will receive text from direct user messages or OCR text extracted from payment screenshots (e.g., Paytm, PhonePe, Swiggy earnings).\n\n## RULES & LOGIC\n1. **Income & Expense Tracking:**\n   - When you detect a transaction, use the Google Sheets Tool - Write Data to save it with columns: Date, Amount, Category, Source/Merchant, Type (income/expense)\n   - Use the Google Sheets Tool - Read Data to check weekly spending patterns\n   - Categories: Gig Earnings, Fuel, Food, Rent, Maintenance, Loan Repayment, Other\n\n2. **The \"Nudge\" Alert:**\n   - After saving transaction data, read the weekly summary to check if spending exceeds 70% of weekly earnings\n   - If yes, suggest saving ₹200 and cutting back on non-essentials (in user language)\n\n3. **Freemium Gate:**\n   - Basic tracking is free\n   - If the user asks for \"Investment planning,\" \"Long-term wealth management,\" or \"Complex Tax advice,\" reply in their language: \"To access detailed financial planning and goal-based savings tools, please upgrade to the Premium plan for ₹49/month.\"\n\n4. **Micro-Savings:**\n   - After a high income entry, suggest saving a small amount (e.g., \"Great job! Save ₹50 towards your phone goal today?\" - translated to user exact language)\n\n## RESPONSE STYLE\n- Keep WhatsApp messages short, scannable, and use emojis (🛵, 💸, 📉)\n- Respond in the EXACT language the user is using (NOT Hindi by default)\n- Use culturally appropriate greetings and phrases for each specific language\n\n## TOOLS USAGE\n1. Use Google Sheets Tool - Read Data to fetch user financial summary\n2. Use Google Sheets Tool - Write Data to save new transactions\n3. Your response will be automatically sent to the user via WhatsApp"
+        }
+      },
+      "id": "6f99bb20-b77c-4d53-826b-8da533eaed4c",
+      "name": "FinSaathi AI Agent5",
+      "type": "@n8n/n8n-nodes-langchain.agent",
+      "typeVersion": 3,
+      "position": [
+        2624,
+        688
+      ]
+    },
+    {
+      "parameters": {},
+      "id": "f5bc1def-c00e-424d-9c3b-4d5de0ad5018",
+      "name": "Conversation Memory5",
+      "type": "@n8n/n8n-nodes-langchain.memoryBufferWindow",
+      "typeVersion": 1.3,
+      "position": [
+        2624,
+        912
+      ]
+    },
+    {
+      "parameters": {
+        "descriptionType": "manual",
+        "toolDescription": "Reads the user's transaction history from Google Sheets to calculate weekly earnings and expenses",
+        "documentId": {
+          "__rl": true,
+          "value": "1802PhsGMXTa_rXoPZqMlftZx-Ar2Pu_hkCIIUtVF9Z8",
+          "mode": "id"
+        },
+        "sheetName": {
+          "__rl": true,
+          "value": "gid=0",
+          "mode": "list",
+          "cachedResultName": "Sheet1",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1802PhsGMXTa_rXoPZqMlftZx-Ar2Pu_hkCIIUtVF9Z8/edit#gid=0"
+        },
+        "options": {}
+      },
+      "id": "c5ec27d6-3b11-41cc-b408-92a56a9e506e",
+      "name": "Google Sheets Tool - Read Data5",
+      "type": "n8n-nodes-base.googleSheetsTool",
+      "typeVersion": 4.7,
+      "position": [
+        2752,
+        912
+      ],
+      "credentials": {
+        "googleSheetsOAuth2Api": {
+          "id": "lDB3EM6IBg4nVYub",
+          "name": "Google Sheets account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "descriptionType": "manual",
+        "toolDescription": "Writes new transaction data to Google Sheets after extraction",
+        "operation": "appendOrUpdate",
+        "documentId": {
+          "__rl": true,
+          "value": "=1jMYDXiNI_xIkslct9nbzZ-nisjCNhZNerzhHxQ0l-jo",
+          "mode": "id"
+        },
+        "sheetName": {
+          "__rl": true,
+          "value": "gid=0",
+          "mode": "list",
+          "cachedResultName": "Sheet1",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1jMYDXiNI_xIkslct9nbzZ-nisjCNhZNerzhHxQ0l-jo/edit#gid=0"
+        },
+        "columns": {
+          "mappingMode": "autoMapInputData",
+          "value": {},
+          "matchingColumns": [],
+          "schema": [],
+          "attemptToConvertTypes": false,
+          "convertFieldsToString": false
+        },
+        "options": {}
+      },
+      "id": "6fd7c4b1-703f-4a47-9b03-7d87d4c8a5d8",
+      "name": "Google Sheets Tool - Write Data5",
+      "type": "n8n-nodes-base.googleSheetsTool",
+      "typeVersion": 4.7,
+      "position": [
+        2880,
+        912
+      ],
+      "credentials": {
+        "googleSheetsOAuth2Api": {
+          "id": "lDB3EM6IBg4nVYub",
+          "name": "Google Sheets account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "documentId": {
+          "__rl": true,
+          "value": "1jMYDXiNI_xIkslct9nbzZ-nisjCNhZNerzhHxQ0l-jo",
+          "mode": "id"
+        },
+        "sheetName": {
+          "__rl": true,
+          "value": "gid=0",
+          "mode": "list",
+          "cachedResultName": "Sheet1",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1jMYDXiNI_xIkslct9nbzZ-nisjCNhZNerzhHxQ0l-jo/edit#gid=0"
+        },
+        "options": {}
+      },
+      "id": "20b9ac11-d625-42bc-8d9a-2128c51f3888",
+      "name": "Get Weekly Financial Summary5",
+      "type": "n8n-nodes-base.googleSheets",
+      "typeVersion": 4.7,
+      "position": [
+        3536,
+        688
+      ],
+      "credentials": {
+        "googleSheetsOAuth2Api": {
+          "id": "lDB3EM6IBg4nVYub",
+          "name": "Google Sheets account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "jsCode": "// Get the weekly financial summary from Google Sheets\nconst summaryData = $input.all();\n\n// Get configuration values from Workflow Configuration node\nconst config = $('Workflow Configuration5').first().json;\nconst spendingThreshold = config.spending_threshold || 0.7;\nconst savingsSuggestion = config.savings_suggestion_amount || 200;\n\n// Get the original WhatsApp message data\nconst whatsappData = $('WhatsApp Message Received5').first().json;\nconst recipientPhone = whatsappData.from;\n\n// Parse the weekly summary (assuming row 2 contains: Total Income, Total Expenses, Spending Ratio)\nlet totalIncome = 0;\nlet totalExpenses = 0;\nlet spendingRatio = 0;\n\nif (summaryData.length > 0 && summaryData[0].json) {\n  const summary = summaryData[0].json;\n  totalIncome = parseFloat(summary['Total Income'] || summary.total_income || 0);\n  totalExpenses = parseFloat(summary['Total Expenses'] || summary.total_expenses || 0);\n  \n  // Calculate spending ratio\n  if (totalIncome > 0) {\n    spendingRatio = totalExpenses / totalIncome;\n  }\n}\n\n// Check if alert should be triggered\nconst triggerAlert = spendingRatio >= spendingThreshold;\n\n// Generate alert message\nlet alertMessage = '';\nif (triggerAlert) {\n  const percentSpent = Math.round(spendingRatio * 100);\n  alertMessage = `🚨 Alert! You've spent ${percentSpent}% of your weekly earnings (₹${totalExpenses} out of ₹${totalIncome}).\n\n💡 Suggestion: Try to save ₹${savingsSuggestion} this week for your goals. Consider cutting back on non-essentials like chai or snacks. You've got this! 💪`;\n}\n\n// Return the result\nreturn [{\n  json: {\n    total_income: totalIncome,\n    total_expenses: totalExpenses,\n    spending_ratio: spendingRatio,\n    spending_percentage: Math.round(spendingRatio * 100),\n    trigger_alert: triggerAlert,\n    alert_message: alertMessage,\n    from: recipientPhone,\n    threshold: spendingThreshold,\n    savings_suggestion: savingsSuggestion\n  }\n}];"
+      },
+      "id": "629e7a4f-2827-40a8-add4-c6f2e9d34872",
+      "name": "Calculate Spending Ratio & Alert5",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        3760,
+        688
+      ]
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict"
+          },
+          "conditions": [
+            {
+              "id": "id-1",
+              "leftValue": "={{ $json.trigger_alert }}",
+              "operator": {
+                "type": "boolean",
+                "operation": "true"
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "id": "b9fb0334-22c0-4dba-bbea-913b996f2c8a",
+      "name": "Check If Alert Needed5",
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.2,
+      "position": [
+        3984,
+        688
+      ]
+    },
+    {
+      "parameters": {
+        "operation": "send",
+        "phoneNumberId": "=888296161025100",
+        "recipientPhoneNumber": "+918340609960",
+        "textBody": "={{ $json.alert_message }}",
+        "additionalFields": {}
+      },
+      "id": "104ee5e8-8c4b-4201-a904-a9260988ea7a",
+      "name": "Send Alert Message5",
+      "type": "n8n-nodes-base.whatsApp",
+      "typeVersion": 1.1,
+      "position": [
+        4208,
+        688
+      ],
+      "webhookId": "1c351f2c-34ff-46fa-adab-377ff5c62e6e",
+      "credentials": {
+        "whatsAppApi": {
+          "id": "uT3pf88N9NDZMs9p",
+          "name": "WhatsApp account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "id-1",
+              "name": "sessionId",
+              "value": "={{ $json.messages[0].from }}",
+              "type": "string"
+            }
+          ]
+        },
+        "includeOtherFields": true,
+        "options": {}
+      },
+      "id": "9aaf8a6e-b32b-4890-ac2a-82282dfa552d",
+      "name": "Add Session ID",
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        1824,
+        688
+      ]
+    },
+    {
+      "parameters": {
+        "operation": "send",
+        "phoneNumberId": "={{ String(888296161025100) }}",
+        "recipientPhoneNumber": "={{ String(+918340609960) }}",
+        "textBody": "={{ $json.output }}",
+        "additionalFields": {}
+      },
+      "id": "7a39e0b4-b742-406e-96e1-8c4beaaff090",
+      "name": "Send WhatsApp Response",
+      "type": "n8n-nodes-base.whatsApp",
+      "typeVersion": 1.1,
+      "position": [
+        3312,
+        688
+      ],
+      "webhookId": "b72d3a46-118b-43c7-aba3-efa6d1caa4ad",
+      "credentials": {
+        "whatsAppApi": {
+          "id": "uT3pf88N9NDZMs9p",
+          "name": "WhatsApp account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.lmChatGoogleGemini",
+      "typeVersion": 1,
+      "position": [
+        2496,
+        912
+      ],
+      "id": "e1c73189-895f-4a6e-a7f0-5085137a6af6",
+      "name": "Google Gemini Chat Model",
+      "credentials": {
+        "googlePalmApi": {
+          "id": "hdNUU8Uy6tIy7Y6e",
+          "name": "Google Gemini(PaLM) Api account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict",
+            "version": 2
+          },
+          "conditions": [
+            {
+              "id": "id-1",
+              "leftValue": "={{ $json.messages[0].type }}",
+              "rightValue": "text",
+              "operator": {
+                "type": "string",
+                "operation": "equals"
+              }
+            },
+            {
+              "id": "id-2",
+              "leftValue": "={{ $json.messages[0].text.body }}",
+              "operator": {
+                "type": "string",
+                "operation": "notEmpty"
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "id": "ab54adc4-bbf1-4214-a4a8-c940933a9e7a",
+      "name": "Check Message Has Text",
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.2,
+      "position": [
+        1376,
+        688
+      ]
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": false,
+            "leftValue": "",
+            "typeValidation": "loose"
+          },
+          "conditions": [
+            {
+              "id": "id-1",
+              "leftValue": "={{ $json.output }}",
+              "operator": {
+                "type": "string",
+                "operation": "notEmpty"
+              }
+            },
+            {
+              "id": "id-2",
+              "leftValue": "={{ $json.output }}",
+              "rightValue": "No message",
+              "operator": {
+                "type": "string",
+                "operation": "notEquals"
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "id": "9cede027-9d1b-4ef2-9512-b730d4dd4978",
+      "name": "Check Output Is Valid",
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.2,
+      "position": [
+        3088,
+        688
+      ]
+    }
+  ],
+  "pinData": {},
+  "connections": {
+    "Workflow Configuration5": {
+      "main": [
+        [
+          {
+            "node": "Add Session ID",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Add Session ID": {
+      "main": [
+        [
+          {
+            "node": "Check If Image Attached5",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Conversation Memory5": {
+      "ai_memory": [
+        [
+          {
+            "node": "FinSaathi AI Agent5",
+            "type": "ai_memory",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Google Sheets Tool - Read Data5": {
+      "ai_tool": [
+        [
+          {
+            "node": "FinSaathi AI Agent5",
+            "type": "ai_tool",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Google Sheets Tool - Write Data5": {
+      "ai_tool": [
+        [
+          {
+            "node": "FinSaathi AI Agent5",
+            "type": "ai_tool",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Get Weekly Financial Summary5": {
+      "main": [
+        [
+          {
+            "node": "Calculate Spending Ratio & Alert5",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Calculate Spending Ratio & Alert5": {
+      "main": [
+        [
+          {
+            "node": "Check If Alert Needed5",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Check If Alert Needed5": {
+      "main": [
+        [
+          {
+            "node": "Send Alert Message5",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Check If Image Attached5": {
+      "main": [
+        [
+          {
+            "node": "Extract OCR Text from Screenshot5",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "FinSaathi AI Agent5",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Extract OCR Text from Screenshot5": {
+      "main": [
+        [
+          {
+            "node": "FinSaathi AI Agent5",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Send WhatsApp Response": {
+      "main": [
+        [
+          {
+            "node": "Get Weekly Financial Summary5",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Google Gemini Chat Model": {
+      "ai_languageModel": [
+        [
+          {
+            "node": "FinSaathi AI Agent5",
+            "type": "ai_languageModel",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "WhatsApp Message Received5": {
+      "main": [
+        [
+          {
+            "node": "Check Message Has Text",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Check Message Has Text": {
+      "main": [
+        [
+          {
+            "node": "Workflow Configuration5",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "FinSaathi AI Agent5": {
+      "main": [
+        [
+          {
+            "node": "Check Output Is Valid",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Check Output Is Valid": {
+      "main": [
+        [
+          {
+            "node": "Send WhatsApp Response",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": true,
+  "settings": {
+    "executionOrder": "v1",
+    "callerPolicy": "workflowsFromSameOwner",
+    "availableInMCP": false
+  },
+  "versionId": "8af24617-847d-4070-b334-90fea0a2101f",
+  "meta": {
+    "templateCredsSetupCompleted": true,
+    "instanceId": "9deedd64b1620f2028ca5efa4cfee33793dfb0768bf65a2ea32a924b94a525b5"
+  },
+  "id": "lc5anSTv3yck2BDg",
+  "tags": []
+}
