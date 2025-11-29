@@ -103,9 +103,9 @@ const FloatingImage = () => {
           </div>
         </div>
 
-        <div className="absolute bottom-70 right-5 z-20 flex w-full max-w-xs flex-col items-end md:bottom-75 md:right-10">
+        <div className="bottom-70 md:bottom-75 absolute right-5 z-20 flex w-full max-w-xs flex-col items-end md:right-10">
           <div className="flex h-full w-fit flex-col items-center md:items-start">
-            <p className="mt-3 max-w-sm font-circular-web text-violet-50 text-center md:text-right">
+            <p className="mt-3 max-w-sm text-center font-circular-web text-violet-50 md:text-right">
   
 </p>
             <Button

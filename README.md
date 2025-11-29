@@ -34,7 +34,7 @@
 **FinSaathi** is a revolutionary financial platform designed specifically for India's gig economy workers. With over 7.7 million gig workers in India, there's a massive need for accessible, user-friendly financial services. FinSaathi bridges this gap by providing an AI-powered WhatsApp chatbot that helps gig workers manage their finances, access micro-loans, and achieve financial literacy.
 
 Built for **MumbaiHacks 2025**, FinSaathi combines cutting-edge web technologies with a focus on financial inclusion and accessibility. The platform features a stunning, modern UI with smooth animations and an intuitive user experience.
-
+VIDEO LINK - https://youtu.be/IlRMVX9ir98
 ### Why FinSaathi?
 
 - 🎯 **Accessibility First**: WhatsApp-based chatbot accessible to anyone with a smartphone
