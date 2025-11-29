@@ -1,13 +1,33 @@
+import { useEffect, useRef, useState } from "react";
 import gsap from "gsap";
 import { useGSAP } from "@gsap/react";
 import { ScrollTrigger } from "gsap/all";
 import { TiLocationArrow } from "react-icons/ti";
-import { useEffect, useRef, useState } from "react";
-
 import Button from "./Button";
-import VideoPreview from "./VideoPreview";
+import VideoPreview from "./VideoPreview"; 
 
-gsap.registerPlugin(ScrollTrigger);
+// --- MOCKS FOR PREVIEW (DELETE THESE IN PRODUCTION) ---
+const Button = ({ title, containerClass, leftIcon }) => (
+  <button className={`px-4 py-2 rounded-full ${containerClass}`}>
+    {leftIcon} {title}
+  </button>
+);
+const VideoPreview = ({ children }) => <div className="video-preview">{children}</div>;
+const TiLocationArrow = () => (
+  <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><polygon points="3 11 22 2 13 21 11 13 3 11"/></svg>
+);
+const gsap = {
+  registerPlugin: () => {},
+  set: () => {},
+  to: (target, config) => { if (config.onStart) config.onStart(); },
+  from: () => {},
+};
+const ScrollTrigger = {};
+const useGSAP = (callback, config) => { useEffect(callback, [config.dependencies]); };
+// -----------------------------------------------------
+
+
+// gsap.registerPlugin(ScrollTrigger); // Uncomment in production
 
 const Hero = () => {
   const [currentIndex, setCurrentIndex] = useState(1);
@@ -46,7 +66,7 @@ const Hero = () => {
           height: "100%",
           duration: 1,
           ease: "power1.inOut",
-          onStart: () => nextVdRef.current.play(),
+          onStart: () => nextVdRef.current && nextVdRef.current.play(),
         });
         gsap.from("#current-video", {
           transformOrigin: "center center",
@@ -80,14 +100,13 @@ const Hero = () => {
     });
   });
 
-  const getVideoSrc = (index) => `public/videos/finsaathivideo1.mp4`;
-  // const getVideoSrc = (index) => `public/videos/video-${index}.mp4`;
+  // FIXED: Removed 'public' from path. In Vite, public folder assets are referenced from root '/'.
+  const getVideoSrc = (index) => `/videos/finsaathivideo1.mp4`;
 
   return (
     <div className="relative h-dvh w-screen overflow-x-hidden">
       {loading && (
         <div className="flex-center absolute z-[100] h-dvh w-screen overflow-hidden bg-violet-50">
-          {/* https://uiverse.io/G4b413l/tidy-walrus-92 */}
           <div className="three-body">
             <div className="three-body__dot"></div>
             <div className="three-body__dot"></div>
@@ -102,6 +121,7 @@ const Hero = () => {
       >
         <div>
           <div className="mask-clip-path absolute-center absolute z-50 size-64 cursor-pointer overflow-hidden rounded-lg">
+            {/* FIXED IMPORT USE BELOW */}
             <VideoPreview>
               <div
                 onClick={handleMiniVdClick}
