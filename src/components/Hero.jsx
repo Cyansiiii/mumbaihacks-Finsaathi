@@ -4,7 +4,7 @@ import { useGSAP } from "@gsap/react";
 import { ScrollTrigger } from "gsap/all";
 import { TiLocationArrow } from "react-icons/ti";
 import Button from "./Button";
-import VideoPreview from "./VideoPreview"; 
+import VideoPreview from " ./VideoPreview"; 
 
 // --- MOCKS FOR PREVIEW (DELETE THESE IN PRODUCTION) ---
 const Button = ({ title, containerClass, leftIcon }) => (
