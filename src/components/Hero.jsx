@@ -1,33 +1,13 @@
-import { useEffect, useRef, useState } from "react";
 import gsap from "gsap";
 import { useGSAP } from "@gsap/react";
 import { ScrollTrigger } from "gsap/all";
 import { TiLocationArrow } from "react-icons/ti";
+import { useEffect, useRef, useState } from "react";
+
 import Button from "./Button";
-import VideoPreview from " ./VideoPreview"; 
+import VideoPreview from "./VideoPreview";
 
-// --- MOCKS FOR PREVIEW (DELETE THESE IN PRODUCTION) ---
-const Button = ({ title, containerClass, leftIcon }) => (
-  <button className={`px-4 py-2 rounded-full ${containerClass}`}>
-    {leftIcon} {title}
-  </button>
-);
-const VideoPreview = ({ children }) => <div className="video-preview">{children}</div>;
-const TiLocationArrow = () => (
-  <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><polygon points="3 11 22 2 13 21 11 13 3 11"/></svg>
-);
-const gsap = {
-  registerPlugin: () => {},
-  set: () => {},
-  to: (target, config) => { if (config.onStart) config.onStart(); },
-  from: () => {},
-};
-const ScrollTrigger = {};
-const useGSAP = (callback, config) => { useEffect(callback, [config.dependencies]); };
-// -----------------------------------------------------
-
-
-// gsap.registerPlugin(ScrollTrigger); // Uncomment in production
+gsap.registerPlugin(ScrollTrigger);
 
 const Hero = () => {
   const [currentIndex, setCurrentIndex] = useState(1);
@@ -121,7 +101,6 @@ const Hero = () => {
       >
         <div>
           <div className="mask-clip-path absolute-center absolute z-50 size-64 cursor-pointer overflow-hidden rounded-lg">
-            {/* FIXED IMPORT USE BELOW */}
             <VideoPreview>
               <div
                 onClick={handleMiniVdClick}
