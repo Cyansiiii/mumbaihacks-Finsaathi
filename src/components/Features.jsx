@@ -127,7 +127,7 @@ Chaotic income from multiple gig platforms."
       <div className="grid h-[135vh] w-full grid-cols-2 grid-rows-3 gap-7">
         <BentoTilt className="bento-tilt_1 row-span-1 md:col-span-1 md:row-span-2">
           <BentoCard
-            src="videos/feature-2.mp4"
+            src="public/videos/Video_of_Messaging_FinSaathi_Chatbot-vmake.mp4"
             title={
               <>
                 AI <b> Analysis</b>  Engine

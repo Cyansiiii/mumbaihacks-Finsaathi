@@ -67,8 +67,8 @@ const FloatingImage = () => {
                   onMouseLeave={handleMouseLeave}
                   onMouseUp={handleMouseLeave}
                   onMouseEnter={handleMouseLeave}
-                  src="public/img/20251126_0235_Financial Chatbot Interaction_remix_01kayd8zhve2cbjezr14r2cbj2.webp"
-                  alt="public/img/20251126_0235_Financial Chatbot Interaction_remix_01kayd8zhve2cbjezr14r2cbj2.webp"
+                  src="public/image/20251126_0235_Financial Chatbot Interaction_remix_01kayd8zhve2cbjezr14r2cbj2.webp"
+                  alt="public/image/20251126_0235_Financial Chatbot Interaction_remix_01kayd8zhve2cbjezr14r2cbj2.webp"
                   className="object-contain"
                 />
               </div>
@@ -111,7 +111,7 @@ const FloatingImage = () => {
 
             <Button
               id="realm-btn"
-              title="discover prologue"
+              title="discover FinSaathi"
               containerClass="mt-5"
             />
           </div>

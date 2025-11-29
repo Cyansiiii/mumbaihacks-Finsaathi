@@ -13,11 +13,11 @@ const Contact = () => {
       <div className="relative rounded-lg bg-black py-24 text-blue-50 sm:overflow-hidden">
         <div className="absolute -left-60 top-0 hidden h-full w-72 overflow-hidden sm:block lg:left-0 lg:w-96">
           <ImageClipBox
-            src="public/img/task_01kax6tt8zegzs01bbtm0xp6ym_1764064438_img_0.webp"
+            src="public/image/task_01kax6tt8zegzs01bbtm0xp6ym_1764064438_img_0.webp"
             clipClass="contact-clip-path-1"
           />
           <ImageClipBox
-            src="public/img/FinSaathi_-_Gig_Worker_Financial_Solutions_(Alternative_Dark_Cover_Design).webp"
+            src="public/image/task_01kax6tt8zegzs01bbtm0xp6ym_1764064438_img_0.webp"
             clipClass="contact-clip-path-2 lg:translate-y-40 translate-y-60"
           />
         </div>
@@ -28,7 +28,7 @@ const Contact = () => {
             clipClass="absolute md:scale-125"
           />
           <ImageClipBox
-            src="public/img/20251125_1523_Financial Chatbot Logo_remix_01kax6tvx4fyxsd2hvgvtcbr9h.webp"
+            src="public/image/20251125_1523_Financial Chatbot Logo_remix_01kax6tvx4fyxsd2hvgvtcbr9h.webp"
             clipClass="sword-man-clip-path md:scale-125"
           />
         </div>
