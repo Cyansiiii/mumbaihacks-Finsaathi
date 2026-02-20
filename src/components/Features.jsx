@@ -112,7 +112,7 @@ const Features = () => (
 
       <BentoTilt className="border-hsla relative mb-7 h-96 w-full overflow-hidden rounded-md md:h-[65vh]">
         <BentoCard
-          src="public/videos/finsaathivideo2-vmake.mp4"
+          src="/videos/finsaathivideo2-vmake.mp4"
           title={
             <>
               Raw  <b>Earnings  </b>Data
@@ -127,7 +127,7 @@ Chaotic income from multiple gig platforms."
       <div className="grid h-[135vh] w-full grid-cols-2 grid-rows-3 gap-7">
         <BentoTilt className="bento-tilt_1 row-span-1 md:col-span-1 md:row-span-2">
           <BentoCard
-            src="public/videos/Video_of_Messaging_FinSaathi_Chatbot-vmake.mp4"
+            src="/videos/Video_of_Messaging_FinSaathi_Chatbot-vmake.mp4"
             title={
               <>
                 AI <b> Analysis</b>  Engine
@@ -141,7 +141,7 @@ Machine learning processes your patterns"
 
         <BentoTilt className="bento-tilt_1 row-span-1 ms-32 md:col-span-1 md:ms-0">
           <BentoCard
-            src="public/videos/finsaathivideo4.mp4"
+            src="/videos/finsaathivideo4.mp4"
             title={
               <>
                 Smart <b> </b>Insights
@@ -156,7 +156,7 @@ Actionable financial intelligence"
 
         <BentoTilt className="bento-tilt_1 me-14 md:col-span-1 md:me-0">
           <BentoCard
-            src="public/videos/2025-11-25T21-27-09_hey_everyone__today__watermarked-Picwand.mp4"
+            src="/videos/2025-11-25T21-27-09_hey_everyone__today__watermarked-Picwand.mp4"
             title={
               <>
                 Automated<b> </b>Actions
@@ -180,7 +180,7 @@ AI takes action on your behalf."
 
         <BentoTilt className="bento-tilt_2">
           <video
-            src="public/videos/Finsaathi_WhatsApp_Chatbot_Video-Picwand.mp4"
+            src="/videos/Finsaathi_WhatsApp_Chatbot_Video-Picwand.mp4"
             loop
             muted
             autoPlay
